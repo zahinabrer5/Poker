@@ -46,48 +46,22 @@ int main() {
         Card** cards = new Card*[n];
         cards[0] = deck->dealCard();
         cards[1] = deck->dealCard();
-        // cout << "Line 48 reached" << endl;
         Player* player = new Player(cards, 2);
-        // cout << "Line 50 reached" << endl;
         cout << player->toString() << '\n';
-        for (int i = 2; i < n; i++) {
+        for (int i = 2; i < n; i++)
             cards[i] = communityCards[i-2];
-            // cout << cards[i]->toString() << endl;
-        }
         
-        // cout << "Line 57 reached" << endl;
-        // for each possible hand in cards...
-
-        // std::vector<Card*> ints;
-        // for (int i = 0; i < n; i++)
-        //     ints.push_back(cards[i]);
-        // for (int i = 0; i < n; ints.push_back(cards[i++]));
-        // cout << "Line 64 reached" << endl;
-
         vector<vector<int>> combinations = makeCombi(n, k);
         for (vector<int> comb : combinations) {
             Card** handCards = new Card*[k];
-            // cout << "Line 68 reached" << endl;
-            for (int i = 0; i < k; ++i) {
+            for (int i = 0; i < k; ++i)
                 handCards[i] = cards[comb[i]-1];
-                // cout << ints[i]->toString() << endl;
-            }
-            // cout << "Line 73 reached" << endl;
             Hand* hand = new Hand(handCards);
-            // cout << "Line 75 reached" << endl;
             if (hand->getHighestHandRaw() > bestHand) {
-                // cout << "Line 77 reached" << endl;
                 bestHand = hand->getHighestHandRaw();
                 winner = i+1;
             }
-            // cout << hand->toString() << "---\n";
-            // cout << "Line 81 reached" << endl;
-            // Card::deleteCards(handCards, k);
-            // Hand::deleteHand(hand);
-            // cout << "Line 84 reached" << endl;
         }
-    
-        // Card::deleteCards(cards, n);
     }
 
     int winnerInput = 0;

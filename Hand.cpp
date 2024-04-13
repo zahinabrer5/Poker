@@ -102,20 +102,16 @@ ostream& operator<<(ostream& os, const Hand& hand) {
 
 void Hand::determineHighestHand() {
     for (int i = 8; i >= 0; i--) {
-        // cout << "Line 105 of Hands.cpp reached" << endl;
         if (functions[i](this)) {
-            // cout << "Line 107 of Hands.cpp reached" << endl;
             highestHand = i+2;
             return;
         }
     }
-    // cout << "Line 112 of Hands.cpp reached" << endl;
 
     highestHand = 1; // high card (doesn't fit into the other categories)
 }
 
 bool Hand::checkRoyalFlush(Hand* hand) {
-    // cout << "Line 117 of Hands.cpp reached" << endl;
     if (!checkFlush(hand))
         return false;
     
@@ -127,7 +123,6 @@ bool Hand::checkRoyalFlush(Hand* hand) {
 }
 
 bool Hand::checkStraightFlush(Hand* hand) {
-    // cout << "Line 132 of Hands.cpp reached" << endl;
     if (!checkFlush(hand))
         return false;
 
@@ -137,7 +132,6 @@ bool Hand::checkStraightFlush(Hand* hand) {
 }
 
 bool Hand::check4OfAKind(Hand* hand) {
-    // cout << "Line 142 of Hands.cpp reached" << endl;
     unordered_map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
@@ -153,7 +147,6 @@ bool Hand::check4OfAKind(Hand* hand) {
 }
 
 bool Hand::checkFullHouse(Hand* hand) {
-    // cout << "Line 156 of Hands.cpp reached" << endl;
     unordered_map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
@@ -169,7 +162,6 @@ bool Hand::checkFullHouse(Hand* hand) {
 }
 
 bool Hand::checkFlush(Hand* hand) {
-    // cout << "Line 174 of Hands.cpp reached" << endl;
     for (int i = 1; i < Hand::SIZE_OF_HAND; i++)
         if (hand->getCards()[i]->getSuit() != hand->getCards()[i-1]->getSuit())
             return false;
@@ -177,7 +169,6 @@ bool Hand::checkFlush(Hand* hand) {
 }
 
 bool Hand::checkStraight(Hand* hand) {
-    // cout << "Line 182 of Hands.cpp reached" << endl;
     int* faces = new int[Hand::SIZE_OF_HAND];
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         faces[i] = hand->getCards()[i]->getFace();
@@ -193,7 +184,6 @@ bool Hand::checkStraight(Hand* hand) {
 }
 
 bool Hand::check3OfAkind(Hand* hand) {
-    // cout << "Line 198 of Hands.cpp reached" << endl;
     unordered_map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
@@ -211,7 +201,6 @@ bool Hand::check3OfAkind(Hand* hand) {
 }
 
 bool Hand::check2Pair(Hand* hand) {
-    // cout << "Line 216 of Hands.cpp reached" << endl;
     unordered_map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
@@ -229,16 +218,11 @@ bool Hand::check2Pair(Hand* hand) {
 }
 
 bool Hand::checkPair(Hand* hand) {
-    // cout << "Line 234 of Hands.cpp reached" << endl;
     unordered_map<int,int> map;
-    // cout << "Line 236 of Hands.cpp reached" << endl;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++) {
-        // cout << "Line 238 of Hands.cpp reached" << endl;
         int face = hand->getCards()[i]->getFace();
-        // cout << "Face: " << face << endl;
         map[face]++;
     }
-    // cout << "Line 243 of Hands.cpp reached" << endl;
 
     if (map.size() != 4) return false;
 

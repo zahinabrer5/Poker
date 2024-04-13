@@ -13,7 +13,6 @@
 using namespace std;
 
 DeckOfCards::DeckOfCards() {
-    // cout << "DeckOfCards() called!" << endl;
     deck = new Card*[SIZE_OF_DECK];
     int i = 0;
     for (int s = 0; s < 4; s++)
@@ -22,7 +21,6 @@ DeckOfCards::DeckOfCards() {
 }
 
 DeckOfCards::~DeckOfCards() {
-    // cout << "~DeckOfCards() called!" << endl;
     for (int i = 0; i < SIZE_OF_DECK; i++)
         delete deck[i];
     delete[] deck;

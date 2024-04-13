@@ -16,14 +16,11 @@ string Card::suits[] = { "Hearts", "Diamonds", "Clubs", "Spades" };
 
 // default constructor
 Card::Card() {
-    // the following print and other similar statements are for debugging
-    // cout << "Card() called!" << endl;
     numOfCards++;
 }
 
 // parameterized constructor
 Card::Card(int face, int suit) {
-    // cout << "Card(int, int) called!" << endl;
     setFace(face);
     setSuit(suit);
     numOfCards++;
@@ -31,13 +28,11 @@ Card::Card(int face, int suit) {
 
 // copy constructor
 Card::Card(const Card &c) : face(c.face), suit(c.suit) {
-    // cout << "Card copy constructor called!" << endl;
     numOfCards++;
 }
 
 // destructor
 Card::~Card() {
-    // cout << "~Card() called!" << endl;
     numOfCards--;
 }
 
