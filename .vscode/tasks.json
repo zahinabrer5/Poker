@@ -1,0 +1,59 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build c++ project",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "g++",
+            "args": [
+                "-std=c++17",
+                "-g",
+                "-o",
+                "a.out",
+                "*.cpp"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build & run c++ project in xfce4-terminal",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "xfce4-terminal",
+            "args": [
+                "--working-directory=${workspaceFolder}",
+                "-H",
+                "-e",
+                "'bash -c \"g++ -std=c++17 -g -o a.out *.cpp && ./a.out\"'"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build & run c++ project in xterm",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "xterm",
+            "args": [
+                "-hold",
+                "-e",
+                "'g++ -std=c++17 -g -o a.out *.cpp && ./a.out'"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+    ]
+}
