@@ -1,4 +1,6 @@
 *.out
-out.txt
-*.zip
+*.txt
 *.log
+*.zip
+myapp
+app

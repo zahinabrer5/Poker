@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -10,107 +11,175 @@
 
 using namespace std;
 
-void makeCombiUtil(vector<vector<int>>& ans,
-    vector<int>& tmp, int n, int left, int k);
+int getInt();
+void makeCombiUtil(vector<vector<int>> &ans,
+                   vector<int> &tmp, int n, int left, int k);
 vector<vector<int>> makeCombi(int n, int k);
+void printVector(vector<int> v);
+
+int main2() {
+    // given number
+    int n = 7;
+    int k = 5;
+    vector<vector<int>> ans = makeCombi(n, k);
+    for (int i = 0; i < ans.size(); i++) {
+        for (int j = 0; j < ans[i].size(); j++)
+            cout << ans[i][j] << " ";
+        cout << '\n';
+    }
+    return 0;
+}
 
 int main() {
-    DeckOfCards* deck = new DeckOfCards();
-    
-    deck->shuffle();
-
-    int max = (52-5)/2;
-    int numPlayers = 0;
+    bool playAgain = false;
     do {
-        cout << "Enter number of players (1-" << max << "): ";
-        cin >> numPlayers;
-    } while (!(1 <= numPlayers && numPlayers <= max));
+        DeckOfCards *deck = new DeckOfCards();
 
-    Card** communityCards = new Card*[5];
-    cout << "\nCommunity Cards:\n";
-    cout << "===============================\n";
-    for (int i = 0; i < 5; i++) {
-        communityCards[i] = deck->dealCard();
-        cout << communityCards[i]->toString() << '\n';
-    }
-    cout << '\n';
+        deck->shuffle();
 
-    int winner = 0;
-    int bestHand = 0;
+        int max = (52-Hand::SIZE_OF_HAND)/2;
+        int numPlayers = 0;
+        do {
+            cout << "Enter number of players (1-" << max << "): ";
+            numPlayers = getInt();
+        } while (!(1 <= numPlayers && numPlayers <= max));
 
-    for (int i = 0; i < numPlayers; i++) {
-        // 7 choose 5 
-        int n = 7;
-        int k = 5;
-        
-        Card** cards = new Card*[n];
-        cards[0] = deck->dealCard();
-        cards[1] = deck->dealCard();
-        Player* player = new Player(cards, 2);
-        cout << player->toString() << '\n';
-        for (int i = 2; i < n; i++)
-            cards[i] = communityCards[i-2];
-        
-        vector<vector<int>> combinations = makeCombi(n, k);
-        for (vector<int> comb : combinations) {
-            Card** handCards = new Card*[k];
-            for (int i = 0; i < k; ++i)
-                handCards[i] = cards[comb[i]-1];
-            Hand* hand = new Hand(handCards);
-            if (hand->getHighestHandRaw() > bestHand) {
-                bestHand = hand->getHighestHandRaw();
-                winner = i+1;
+        Card **communityCards = new Card *[Hand::SIZE_OF_HAND]; // leak
+        cout << "\nCommunity Cards:\n";
+        cout << "===============================\n";
+        for (int i = 0; i < Hand::SIZE_OF_HAND; i++) {
+            communityCards[i] = deck->dealCard();
+            cout << "Card " << (i + 1) << ": " << communityCards[i]->toString() << '\n';
+        }
+        cout << '\n';
+
+        int winner = 0;
+        int bestHand = 0;
+
+        for (int i = 0; i < numPlayers; i++) {
+            // 7 choose 5
+            int n = 7;
+            int k = 5;
+
+            Card **cards = new Card *[n]; // leak
+            cards[0] = deck->dealCard();
+            cards[1] = deck->dealCard();
+            Player *player = new Player(cards, 2, to_string(i + 1)); // leak
+            cout << player->toString() << '\n';
+            // delete player;
+            for (int i = 2; i < n; i++)
+                cards[i] = communityCards[i-2];
+
+            // for (int i = 0; i < n; i++)
+            //     cout << "Card " << (i+1) << ": " << cards[i]->toString() << '\n';
+
+            vector<vector<int>> combinations = makeCombi(n, k);
+            for (vector<int> comb : combinations) {
+                // cout << "Comb: ";
+                // printVector(comb);
+                Card **handCards = new Card *[k]; // leak
+                for (int i = 0; i < k; ++i)
+                    handCards[i] = cards[comb[i]-1];
+                Hand *hand = new Hand(handCards); // leak
+                // cout << hand->toString() << "---\n";
+                if (hand->getHighestHandRaw() > bestHand) {
+                    bestHand = hand->getHighestHandRaw();
+                    winner = i + 1;
+                }
+            }
+
+            // Card::deleteCards(cards, n);
+        }
+
+        // Card::deleteCards(communityCards, Hand::SIZE_OF_HAND);
+        delete deck;
+
+        if (numPlayers > 1) {
+            int winnerInput = 0;
+            do {
+                cout << "If there are multiple winners, pick the first one.\n";
+                cout << "Who wins this round of poker? Enter a player (1-" << numPlayers << "): ";
+                winnerInput = getInt();
+            } while (!(1 <= winnerInput && winnerInput <= numPlayers));
+
+            if (winnerInput != winner) {
+                cout << "Wrong! The actual winner was Player " << winner << '\n';
+                // cout << "Player " << winner << "'s hand was " << Hand::handTypes[bestHand-1] << '\n';
             }
         }
-    }
 
-    int winnerInput = 0;
-    do {
-        cout << "Who wins this round of poker? Enter a player (1-" << numPlayers << "): ";
-        cin >> winnerInput;
-    } while (!(1 <= winnerInput && winnerInput <= numPlayers));
-
-    if (winnerInput != winner) {
-        cout << "Wrong! The actual winner was Player #" << winner << '\n';
-        cout << "Player #" << winner << "'s hand was " << Hand::handTypes[bestHand-1] << '\n';
-        return 0;
-    }
-
-    cout << "What hand did Player #" << winner << " have?\n";
-    int bestHandInput = 0;
-    do {
+        cout << "What hand did Player " << winner << " have?\n";
+        int bestHandInput = 0;
         for (int i = 0; i < 10; i++)
-            cout << (i+1) << ": " << Hand::handTypes[i] << '\n';
-        cout << "Enter the corresponding hand number (1-10): ";
-        cin >> bestHandInput;
-    } while (!(1 <= bestHandInput && bestHandInput <= 10));
+            cout << (i + 1) << ": " << Hand::handTypes[i] << '\n';
+        do {
+            cout << "Enter the corresponding hand number (1-10): ";
+            bestHandInput = getInt();
+        } while (!(1 <= bestHandInput && bestHandInput <= 10));
 
-    if (bestHandInput != bestHand) {
-        cout << "Wrong! The winner's hand was " << Hand::handTypes[bestHand-1] << '\n';
-        return 0;
-    }
+        if (bestHandInput != bestHand)
+            cout << "Wrong! The winner's hand was " << Hand::handTypes[bestHand-1] << '\n';
+        else
+            cout << "Correct!\n";
 
-    cout << "Correct! Thanks for playing.\n";
+        int ans;
+        do {
+            cout << "Thanks for playing. Play again? 1=Yes, 0=No: ";
+            ans = getInt();
+        } while (!(0 <= ans && ans <= 1));
+        // set playAgain to ans in the if statement because you can
+        if (playAgain = ans)
+            for (int i = 0; i < 5; i++)
+                cout << '\n';
+    } while (playAgain);
 
     return 0;
 }
 
+void ignoreLine() {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+// https://www.learncpp.com/cpp-tutorial/stdcin-and-handling-invalid-input/
+int getInt() {
+    while (true) { // Loop until user enters a valid input
+        // cout << "Enter an integer: ";
+        int x{};
+        cin >> x;
+
+        // Check for failed extraction
+        if (!cin) { // If the previous extraction failed
+            if (cin.eof()) // If the stream was closed
+                exit(0);   // Shut down the program now
+
+            // Let's handle the failure
+            cin.clear();  // Put us back in 'normal' operation mode
+            ignoreLine(); // And remove the bad input
+
+            cout << "Please enter an integer: ";
+            continue;
+        }
+
+        ignoreLine(); // Remove any extraneous input
+        return x;     // Return the value we extracted
+    }
+}
+
 // https://www.geeksforgeeks.org/make-combinations-size-k/
-void makeCombiUtil(vector<vector<int>>& ans,
-    vector<int>& tmp, int n, int left, int k) {
+void makeCombiUtil(vector<vector<int>> &ans,
+                   vector<int> &tmp, int n, int left, int k) {
     // Pushing this vector to a vector of vector
     if (k == 0) {
         ans.push_back(tmp);
         return;
     }
- 
+
     // i iterates from left to n. First time
     // left will be 1
-    for (int i = left; i <= n; ++i)
-    {
+    for (int i = left; i <= n; ++i) {
         tmp.push_back(i);
-        makeCombiUtil(ans, tmp, n, i + 1, k - 1);
- 
+        makeCombiUtil(ans, tmp, n, i+1, k-1);
+
         // Popping out last inserted element
         // from the vector
         tmp.pop_back();
@@ -122,4 +191,10 @@ vector<vector<int>> makeCombi(int n, int k) {
     vector<int> tmp;
     makeCombiUtil(ans, tmp, n, 1, k);
     return ans;
+}
+
+void printVector(vector<int> v) {
+    for (auto i : v)
+        cout << i << ' ';
+    cout << '\n';
 }

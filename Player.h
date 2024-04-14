@@ -15,7 +15,7 @@ using namespace std;
 
 class Player {
 private:
-    int id;
+    string name;
     Card** cards;
     int numOfCards = 2;
     static int numOfPlayers;
@@ -24,15 +24,15 @@ private:
 public:
     Player();
 
-    Player(int numOfCards);
+    Player(int numOfCards, string name);
 
-    Player(Card** cards, int numOfCards);
+    Player(Card** cards, int numOfCards, string name);
 
     Player(const Player &p);
 
     ~Player();
 
-    [[nodiscard]] int getId();
+    [[nodiscard]] string getName();
 
     [[nodiscard]] int getNumOfCards();
 

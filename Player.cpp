@@ -17,19 +17,19 @@ int Player::idIncrementor = 0;
 Player::Player() {
     cards = new Card*[numOfCards];
     numOfPlayers++;
-    id = ++idIncrementor;
+    name = "1";
 }
 
-Player::Player(int numOfCards) {
+Player::Player(int numOfCards, string name) {
     if (numOfCards < 1 || numOfCards > 5)
         return;
     this->numOfCards = numOfCards;
     cards = new Card*[numOfCards];
     numOfPlayers++;
-    id = ++idIncrementor;
+    this->name = name;
 }
 
-Player::Player(Card** cards, int numOfCards) {
+Player::Player(Card** cards, int numOfCards, string name) {
     if (numOfCards < 1 || numOfCards > 5)
         return;
     this->numOfCards = numOfCards;
@@ -38,12 +38,11 @@ Player::Player(Card** cards, int numOfCards) {
         this->cards[i] = cards[i];
     // Card::deleteCards(cards, numOfCards);
     numOfPlayers++;
-    id = ++idIncrementor;
+    this->name = name;
 }
 
-Player::Player(const Player &p) : cards(p.cards), numOfCards(p.numOfCards) {
+Player::Player(const Player &p) : cards(p.cards), numOfCards(p.numOfCards), name(p.name) {
     numOfPlayers++;
-    id = ++idIncrementor;
 }
 
 Player::~Player() {
@@ -51,8 +50,8 @@ Player::~Player() {
     numOfPlayers--;
 }
 
-int Player::getId() {
-    return id;
+string Player::getName() {
+    return name;
 }
 
 int Player::getNumOfCards() {
@@ -79,10 +78,10 @@ void addCard(Card* card) {
 
 string Player::toString() const {
     stringstream ss;
-    ss << "Player #" << id << ":\n";
+    ss << "Player " << name << ":\n";
     ss << "===============================\n";
     for (int i = 0; i < numOfCards; i++)
-        ss << "Card #" << (i+1) << ": " << cards[i]->toString() << '\n';
+        ss << "Card " << (i+1) << ": " << cards[i]->toString() << '\n';
     return ss.str();
 }
 
@@ -96,9 +95,9 @@ void Player::operator=(const Player& other) {
 }
 
 ostream& operator<<(ostream& os, const Player& player) {
-    os << "Player #" << player.id << ":\n";
+    os << "Player " << player.name << ":\n";
     os << "===============================\n";
     for (int i = 0; i < player.numOfCards; i++)
-        os << "Card #" << (i+1) << ": " << player.cards[i] << '\n';
+        os << "Card " << (i+1) << ": " << player.cards[i] << '\n';
     return os;
 }
