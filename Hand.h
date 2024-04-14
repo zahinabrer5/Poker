@@ -41,7 +41,7 @@ public:
 
     static int getNumOfHands();
 
-    static void deleteHand(Hand *hand);
+    // static void deleteHand(Hand *hand);
 
     void operator=(const Hand& other);
 

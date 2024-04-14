@@ -51,7 +51,8 @@ Hand::Hand(const Hand &h) : cards(h.cards), highestHand(h.highestHand) {
 }
 
 Hand::~Hand() {
-    Card::deleteCards(cards, SIZE_OF_HAND);
+    // Card::deleteCards(cards, SIZE_OF_HAND);
+    delete[] cards;
     numOfHands--;
 }
 
@@ -81,10 +82,10 @@ int Hand::getNumOfHands() {
     return numOfHands;
 }
 
-void Hand::deleteHand(Hand *hand) {
-    Card::deleteCards(hand->getCards(), Hand::SIZE_OF_HAND);
-    delete hand;
-}
+// void Hand::deleteHand(Hand *hand) {
+//     Card::deleteCards(hand->getCards(), Hand::SIZE_OF_HAND);
+//     delete hand;
+// }
 
 void Hand::operator=(const Hand& other) {
     cards = other.cards;
@@ -139,8 +140,8 @@ bool Hand::check4OfAKind(Hand *hand) {
     if (map.size() != 2) return false;
 
     if (
-        map.begin()->second == 1 && map.end()->second == 4 ||
-        map.begin()->second == 4 && map.end()->second == 1
+        map.begin()->first == 1 && map.end()->second == 4 ||
+        map.begin()->first == 4 && map.end()->second == 1
     ) return true;
 
     return false;
@@ -154,8 +155,8 @@ bool Hand::checkFullHouse(Hand *hand) {
     if (map.size() != 2) return false;
 
     if (
-        map.begin()->second == 2 && map.end()->second == 3 ||
-        map.begin()->second == 3 && map.end()->second == 2
+        map.begin()->first == 2 && map.end()->second == 3 ||
+        map.begin()->first == 3 && map.end()->second == 2
     ) return true;
 
     return false;

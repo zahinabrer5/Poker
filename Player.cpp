@@ -12,7 +12,6 @@
 using namespace std;
 
 int Player::numOfPlayers = 0;
-int Player::idIncrementor = 0;
 
 Player::Player() {
     cards = new Card*[numOfCards];
@@ -46,7 +45,8 @@ Player::Player(const Player &p) : cards(p.cards), numOfCards(p.numOfCards), name
 }
 
 Player::~Player() {
-    Card::deleteCards(cards, numOfCards);
+    // Card::deleteCards(cards, numOfCards);
+    delete[] cards;
     numOfPlayers--;
 }
 
@@ -90,6 +90,7 @@ int Player::getNumOfPlayers() {
 }
 
 void Player::operator=(const Player& other) {
+    name = other.name;
     numOfCards = other.numOfCards;
     cards = other.cards;
 }

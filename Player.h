@@ -19,7 +19,6 @@ private:
     Card **cards;
     int numOfCards = 2;
     static int numOfPlayers;
-    static int idIncrementor;
 
 public:
     Player();

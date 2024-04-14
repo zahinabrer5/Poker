@@ -44,12 +44,12 @@ int main() {
             numPlayers = getInt();
         } while (!(1 <= numPlayers && numPlayers <= max));
 
-        Card **communityCards = new Card *[Hand::SIZE_OF_HAND]; // leak
+        Card **communityCards = new Card *[Hand::SIZE_OF_HAND];
         cout << "\nCommunity Cards:\n";
         cout << "===============================\n";
         for (int i = 0; i < Hand::SIZE_OF_HAND; i++) {
             communityCards[i] = deck->dealCard();
-            cout << "Card " << (i + 1) << ": " << communityCards[i]->toString() << '\n';
+            cout << "Card " << (i+1) << ": " << communityCards[i]->toString() << '\n';
         }
         cout << '\n';
 
@@ -61,12 +61,12 @@ int main() {
             int n = 7;
             int k = 5;
 
-            Card **cards = new Card *[n]; // leak
+            Card **cards = new Card *[n];
             cards[0] = deck->dealCard();
             cards[1] = deck->dealCard();
-            Player *player = new Player(cards, 2, to_string(i + 1)); // leak
+            Player *player = new Player(cards, 2, to_string(i+1));
             cout << player->toString() << '\n';
-            // delete player;
+            delete player;
             for (int i = 2; i < n; i++)
                 cards[i] = communityCards[i-2];
 
@@ -77,21 +77,23 @@ int main() {
             for (vector<int> comb : combinations) {
                 // cout << "Comb: ";
                 // printVector(comb);
-                Card **handCards = new Card *[k]; // leak
+                Card **handCards = new Card *[k];
                 for (int i = 0; i < k; ++i)
                     handCards[i] = cards[comb[i]-1];
-                Hand *hand = new Hand(handCards); // leak
+                Hand *hand = new Hand(handCards);
                 // cout << hand->toString() << "---\n";
                 if (hand->getHighestHandRaw() > bestHand) {
                     bestHand = hand->getHighestHandRaw();
-                    winner = i + 1;
+                    winner = i+1;
                 }
+                delete[] handCards;
+                delete hand;
             }
 
-            // Card::deleteCards(cards, n);
+            delete[] cards;
         }
 
-        // Card::deleteCards(communityCards, Hand::SIZE_OF_HAND);
+        delete[] communityCards;
         delete deck;
 
         if (numPlayers > 1) {
@@ -111,7 +113,7 @@ int main() {
         cout << "What hand did Player " << winner << " have?\n";
         int bestHandInput = 0;
         for (int i = 0; i < 10; i++)
-            cout << (i + 1) << ": " << Hand::handTypes[i] << '\n';
+            cout << (i+1) << ": " << Hand::handTypes[i] << '\n';
         do {
             cout << "Enter the corresponding hand number (1-10): ";
             bestHandInput = getInt();

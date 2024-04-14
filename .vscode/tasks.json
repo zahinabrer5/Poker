@@ -57,6 +57,24 @@
             }
         },
         {
+            "label": "build, run & check for memory leaks in c++ project (xfce4-terminal)",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "xfce4-terminal",
+            "args": [
+                "--working-directory=${workspaceFolder}",
+                "-H",
+                "-e",
+                "'bash -c \"g++ -std=c++17 -fsanitize=address -O1 -fno-omit-frame-pointer -g *.cpp -o app && ./app\"'"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
             "label": "build & run c++ project in xfce4-terminal",
             "type": "shell",
             "options": {
