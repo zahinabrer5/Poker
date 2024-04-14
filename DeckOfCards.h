@@ -10,7 +10,7 @@
 
 class DeckOfCards {
 private:
-    Card** deck;
+    Card **deck;
     int currentCard = 0;
     static const int SIZE_OF_DECK = 52;
 
@@ -21,7 +21,7 @@ public:
 
     void shuffle();
 
-    Card* dealCard();
+    Card *dealCard();
 
     bool moreCards();
 };

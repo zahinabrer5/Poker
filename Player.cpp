@@ -29,7 +29,7 @@ Player::Player(int numOfCards, string name) {
     this->name = name;
 }
 
-Player::Player(Card** cards, int numOfCards, string name) {
+Player::Player(Card **cards, int numOfCards, string name) {
     if (numOfCards < 1 || numOfCards > 5)
         return;
     this->numOfCards = numOfCards;
@@ -58,15 +58,15 @@ int Player::getNumOfCards() {
     return numOfCards;
 }
 
-Card** Player::getCards() {
+Card **Player::getCards() {
     return cards;
 }
 
 /*
-void addCard(Card* card) {
+void addCard(Card *card) {
     if (numOfCards == 5)
         return;
-    Card** updated = new Card*[++numOfCards];
+    Card **updated = new Card*[++numOfCards];
     for (int i = 0; i < numOfCards-1; i++)
         updated[i] = cards[i];
     updated[numOfCards-1] = card;

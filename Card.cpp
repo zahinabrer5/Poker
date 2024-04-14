@@ -65,7 +65,7 @@ int Card::getNumOfCards() {
     return numOfCards;
 }
 
-void Card::deleteCards(Card** cards, int size) {
+void Card::deleteCards(Card **cards, int size) {
     for (int i = 0; i < size; i++)
         delete cards[i];
     delete[] cards;

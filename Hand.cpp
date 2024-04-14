@@ -16,7 +16,7 @@ using namespace std;
 
 // https://cplusplus.com/forum/beginner/4639/
 // https://stackoverflow.com/a/65282525/21405641
-bool (*(functions[9]))(Hand* hand) = {
+bool (*(functions[9]))(Hand *hand) = {
     Hand::checkPair,
     Hand::check2Pair,
     Hand::check3OfAkind,
@@ -36,7 +36,7 @@ Hand::Hand() {
     cards = new Card*[SIZE_OF_HAND];
 }
 
-Hand::Hand(Card** cards) {
+Hand::Hand(Card **cards) {
     this->cards = new Card*[SIZE_OF_HAND];
     for (int i = 0; i < SIZE_OF_HAND; i++)
         this->cards[i] = cards[i];
@@ -55,7 +55,7 @@ Hand::~Hand() {
     numOfHands--;
 }
 
-Card** Hand::getCards() {
+Card **Hand::getCards() {
     return cards;
 }
 
@@ -81,7 +81,7 @@ int Hand::getNumOfHands() {
     return numOfHands;
 }
 
-void Hand::deleteHand(Hand* hand) {
+void Hand::deleteHand(Hand *hand) {
     Card::deleteCards(hand->getCards(), Hand::SIZE_OF_HAND);
     delete hand;
 }
@@ -111,7 +111,7 @@ void Hand::determineHighestHand() {
     highestHand = 1; // high card (doesn't fit into the other categories)
 }
 
-bool Hand::checkRoyalFlush(Hand* hand) {
+bool Hand::checkRoyalFlush(Hand *hand) {
     if (!checkFlush(hand))
         return false;
     
@@ -122,7 +122,7 @@ bool Hand::checkRoyalFlush(Hand* hand) {
     return true;
 }
 
-bool Hand::checkStraightFlush(Hand* hand) {
+bool Hand::checkStraightFlush(Hand *hand) {
     if (!checkFlush(hand))
         return false;
 
@@ -131,7 +131,7 @@ bool Hand::checkStraightFlush(Hand* hand) {
     return false;
 }
 
-bool Hand::check4OfAKind(Hand* hand) {
+bool Hand::check4OfAKind(Hand *hand) {
     unordered_map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
@@ -146,7 +146,7 @@ bool Hand::check4OfAKind(Hand* hand) {
     return false;
 }
 
-bool Hand::checkFullHouse(Hand* hand) {
+bool Hand::checkFullHouse(Hand *hand) {
     unordered_map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
@@ -161,15 +161,15 @@ bool Hand::checkFullHouse(Hand* hand) {
     return false;
 }
 
-bool Hand::checkFlush(Hand* hand) {
+bool Hand::checkFlush(Hand *hand) {
     for (int i = 1; i < Hand::SIZE_OF_HAND; i++)
         if (hand->getCards()[i]->getSuit() != hand->getCards()[i-1]->getSuit())
             return false;
     return true;
 }
 
-bool Hand::checkStraight(Hand* hand) {
-    int* faces = new int[Hand::SIZE_OF_HAND];
+bool Hand::checkStraight(Hand *hand) {
+    int *faces = new int[Hand::SIZE_OF_HAND];
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         faces[i] = hand->getCards()[i]->getFace();
     sort(faces, faces+Hand::SIZE_OF_HAND);
@@ -183,7 +183,7 @@ bool Hand::checkStraight(Hand* hand) {
     return true;
 }
 
-bool Hand::check3OfAkind(Hand* hand) {
+bool Hand::check3OfAkind(Hand *hand) {
     unordered_map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
@@ -200,7 +200,7 @@ bool Hand::check3OfAkind(Hand* hand) {
     return vals[0] == 1 && vals[1] == 1 && vals[2] == 3;
 }
 
-bool Hand::check2Pair(Hand* hand) {
+bool Hand::check2Pair(Hand *hand) {
     unordered_map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
@@ -217,7 +217,7 @@ bool Hand::check2Pair(Hand* hand) {
     return vals[0] == 1 && vals[1] == 2 && vals[2] == 2;
 }
 
-bool Hand::checkPair(Hand* hand) {
+bool Hand::checkPair(Hand *hand) {
     unordered_map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++) {
         int face = hand->getCards()[i]->getFace();

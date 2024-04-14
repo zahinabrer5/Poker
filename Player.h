@@ -16,7 +16,7 @@ using namespace std;
 class Player {
 private:
     string name;
-    Card** cards;
+    Card **cards;
     int numOfCards = 2;
     static int numOfPlayers;
     static int idIncrementor;
@@ -26,7 +26,7 @@ public:
 
     Player(int numOfCards, string name);
 
-    Player(Card** cards, int numOfCards, string name);
+    Player(Card **cards, int numOfCards, string name);
 
     Player(const Player &p);
 
@@ -36,9 +36,9 @@ public:
 
     [[nodiscard]] int getNumOfCards();
 
-    [[nodiscard]] Card** getCards();
+    [[nodiscard]] Card **getCards();
 
-    // void addCard(Card* card);
+    // void addCard(Card *card);
 
     [[nodiscard]] string toString() const;
 

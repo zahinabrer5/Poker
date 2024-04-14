@@ -43,7 +43,7 @@ public:
 
     static int getNumOfCards();
 
-    static void deleteCards(Card** cards, int size);
+    static void deleteCards(Card **cards, int size);
 
     void operator=(const Card& other);
 

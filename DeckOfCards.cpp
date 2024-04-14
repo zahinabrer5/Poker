@@ -32,7 +32,7 @@ void DeckOfCards::shuffle() {
     std::shuffle(deck, deck+SIZE_OF_DECK, std::default_random_engine(seed));
 }
 
-Card* DeckOfCards::dealCard() {
+Card *DeckOfCards::dealCard() {
     if (moreCards())
         return deck[currentCard++];
     return {};
