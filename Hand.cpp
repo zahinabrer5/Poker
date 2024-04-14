@@ -208,7 +208,6 @@ bool Hand::check2Pair(Hand *hand) {
 
     if (map.size() != 3) return false;
 
-    // https://stackoverflow.com/a/8484055/21405641
     vector<int> vals;
     vals.reserve(map.size());
     for (auto kv : map)
@@ -227,7 +226,6 @@ bool Hand::checkPair(Hand *hand) {
 
     if (map.size() != 4) return false;
 
-    // https://stackoverflow.com/a/8484055/21405641
     vector<int> vals;
     vals.reserve(map.size());
     for (auto kv : map)

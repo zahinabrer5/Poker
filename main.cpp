@@ -12,26 +12,14 @@
 using namespace std;
 
 int getInt();
+void getUserInput(int numPlayers, int winner, int bestHand);
 void makeCombiUtil(vector<vector<int>> &ans,
                    vector<int> &tmp, int n, int left, int k);
 vector<vector<int>> makeCombi(int n, int k);
 void printVector(vector<int> v);
-
-int main2() {
-    // given number
-    int n = 7;
-    int k = 5;
-    vector<vector<int>> ans = makeCombi(n, k);
-    for (int i = 0; i < ans.size(); i++) {
-        for (int j = 0; j < ans[i].size(); j++)
-            cout << ans[i][j] << " ";
-        cout << '\n';
-    }
-    return 0;
-}
+bool playAgain();
 
 int main() {
-    bool playAgain = false;
     do {
         DeckOfCards *deck = new DeckOfCards();
 
@@ -49,7 +37,8 @@ int main() {
         cout << "===============================\n";
         for (int i = 0; i < Hand::SIZE_OF_HAND; i++) {
             communityCards[i] = deck->dealCard();
-            cout << "Card " << (i+1) << ": " << communityCards[i]->toString() << '\n';
+            cout << "Card " << (i+1) << ": "
+                << communityCards[i]->toString() << '\n';
         }
         cout << '\n';
 
@@ -57,7 +46,9 @@ int main() {
         int bestHand = 0;
 
         for (int i = 0; i < numPlayers; i++) {
-            // 7 choose 5
+            // Out of 7 cards (community cards + current player's cards),
+            // choose 5 cards to make a hand and check if it's the best possible
+            // hand for the current player
             int n = 7;
             int k = 5;
 
@@ -71,7 +62,8 @@ int main() {
                 cards[i] = communityCards[i-2];
 
             // for (int i = 0; i < n; i++)
-            //     cout << "Card " << (i+1) << ": " << cards[i]->toString() << '\n';
+                // cout << "Card " << (i+1) << ": "
+                //     << cards[i]->toString() << '\n';
 
             vector<vector<int>> combinations = makeCombi(n, k);
             for (vector<int> comb : combinations) {
@@ -96,44 +88,8 @@ int main() {
         delete[] communityCards;
         delete deck;
 
-        if (numPlayers > 1) {
-            int winnerInput = 0;
-            do {
-                cout << "If there are multiple winners, pick the first one.\n";
-                cout << "Who wins this round of poker? Enter a player (1-" << numPlayers << "): ";
-                winnerInput = getInt();
-            } while (!(1 <= winnerInput && winnerInput <= numPlayers));
-
-            if (winnerInput != winner) {
-                cout << "Wrong! The actual winner was Player " << winner << '\n';
-                // cout << "Player " << winner << "'s hand was " << Hand::handTypes[bestHand-1] << '\n';
-            }
-        }
-
-        cout << "What hand did Player " << winner << " have?\n";
-        int bestHandInput = 0;
-        for (int i = 0; i < 10; i++)
-            cout << (i+1) << ": " << Hand::handTypes[i] << '\n';
-        do {
-            cout << "Enter the corresponding hand number (1-10): ";
-            bestHandInput = getInt();
-        } while (!(1 <= bestHandInput && bestHandInput <= 10));
-
-        if (bestHandInput != bestHand)
-            cout << "Wrong! The winner's hand was " << Hand::handTypes[bestHand-1] << '\n';
-        else
-            cout << "Correct!\n";
-
-        int ans;
-        do {
-            cout << "Thanks for playing. Play again? 1=Yes, 0=No: ";
-            ans = getInt();
-        } while (!(0 <= ans && ans <= 1));
-        // set playAgain to ans in the if statement because you can
-        if (playAgain = ans)
-            for (int i = 0; i < 5; i++)
-                cout << '\n';
-    } while (playAgain);
+        getUserInput(numPlayers, winner, bestHand);
+    } while (playAgain());
 
     return 0;
 }
@@ -199,4 +155,49 @@ void printVector(vector<int> v) {
     for (auto i : v)
         cout << i << ' ';
     cout << '\n';
+}
+
+void getUserInput(int numPlayers, int winner, int bestHand) {
+    if (numPlayers > 1) {
+        int winnerInput = 0;
+        do {
+            cout << "If there are multiple winners, pick the first one.\n";
+            cout << "Who wins this round of poker? Enter a player (1-"
+                << numPlayers << "): ";
+            winnerInput = getInt();
+        } while (!(1 <= winnerInput && winnerInput <= numPlayers));
+
+        if (winnerInput != winner) {
+            cout << "Wrong! The actual winner was Player " << winner << '\n';
+            // cout << "Player " << winner << "'s hand was "
+            //     << Hand::handTypes[bestHand-1] << '\n';
+        }
+    }
+
+    cout << "What hand did Player " << winner << " have?\n";
+    int bestHandInput = 0;
+    for (int i = 0; i < 10; i++)
+        cout << (i+1) << ": " << Hand::handTypes[i] << '\n';
+    do {
+        cout << "Enter the corresponding hand number (1-10): ";
+        bestHandInput = getInt();
+    } while (!(1 <= bestHandInput && bestHandInput <= 10));
+
+    if (bestHandInput != bestHand)
+        cout << "Wrong! The winner's hand was "
+            << Hand::handTypes[bestHand-1] << '\n';
+    else
+        cout << "Correct!\n";
+}
+
+bool playAgain() {
+    int ans;
+    do {
+        cout << "Thanks for playing. Play again? 1=Yes, 0=No: ";
+        ans = getInt();
+    } while (!(0 <= ans && ans <= 1));
+    if (ans)
+        for (int i = 0; i < 5; i++)
+            cout << '\n';
+    return ans;
 }
