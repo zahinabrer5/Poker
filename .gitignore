@@ -2,5 +2,6 @@
 *.txt
 *.log
 *.zip
+cmake-build-debug
 myapp
 app

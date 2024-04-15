@@ -4,9 +4,9 @@
 
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include <string>
 #include <sstream>
-#include <unordered_map>
 #include <unordered_map>
 #include <vector>
 
@@ -34,6 +34,7 @@ int Hand::numOfHands = 0;
 
 Hand::Hand() {
     cards = new Card*[SIZE_OF_HAND];
+    numOfHands++;
 }
 
 Hand::Hand(Card **cards) {
@@ -41,6 +42,7 @@ Hand::Hand(Card **cards) {
     for (int i = 0; i < SIZE_OF_HAND; i++)
         this->cards[i] = cards[i];
     // Card::deleteCards(cards, SIZE_OF_HAND);
+    numOfHands++;
     // cout << "Line 41 of Hand.cpp reached" << endl;
     determineHighestHand();
     // cout << "Line 43 of Hand.cpp reached" << endl;
@@ -51,6 +53,10 @@ Hand::Hand(const Hand &h) : cards(h.cards), highestHand(h.highestHand) {
 }
 
 Hand::~Hand() {
+    // we don't delete **cards in the destructor, since we assume the cards are
+    // taken from a DeckOfCards object, which should be later deleted by the
+    // programmer
+    // ^ this also applies to Player and Card classes
     // Card::deleteCards(cards, SIZE_OF_HAND);
     delete[] cards;
     numOfHands--;
@@ -115,7 +121,7 @@ void Hand::determineHighestHand() {
 bool Hand::checkRoyalFlush(Hand *hand) {
     if (!checkFlush(hand))
         return false;
-    
+
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         if (hand->getCards()[i]->getFace() < 8)
             return false;
@@ -133,31 +139,32 @@ bool Hand::checkStraightFlush(Hand *hand) {
 }
 
 bool Hand::check4OfAKind(Hand *hand) {
-    unordered_map<int,int> map;
+    map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
 
     if (map.size() != 2) return false;
 
-    if (
-        map.begin()->first == 1 && map.end()->second == 4 ||
-        map.begin()->first == 4 && map.end()->second == 1
-    ) return true;
+    int first = map.begin()->second;
+    // end points to the imaginary element after the last element of the map
+    int last = map.rbegin()->second; // map.rbegin() == prev(map.end())
+    if (first == 1 && last == 4 || first == 4 && last == 1)
+        return true;
 
     return false;
 }
 
 bool Hand::checkFullHouse(Hand *hand) {
-    unordered_map<int,int> map;
+    map<int,int> map;
     for (int i = 0; i < Hand::SIZE_OF_HAND; i++)
         map[hand->getCards()[i]->getFace()]++;
 
     if (map.size() != 2) return false;
 
-    if (
-        map.begin()->first == 2 && map.end()->second == 3 ||
-        map.begin()->first == 3 && map.end()->second == 2
-    ) return true;
+    int first = map.begin()->second;
+    int last = map.rbegin()->second;
+    if (first == 2 && last == 3 || first == 3 && last == 2)
+        return true;
 
     return false;
 }
