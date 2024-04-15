@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <string>
@@ -19,8 +20,14 @@ vector<vector<int>> makeCombi(int n, int k);
 void printVector(vector<int> v);
 bool playAgain();
 
+int wins = 0;
+
 int main() {
+    int games = 0;
+
     do {
+        games++;
+
         DeckOfCards *deck = new DeckOfCards();
 
         deck->shuffle();
@@ -90,6 +97,9 @@ int main() {
 
         getUserInput(numPlayers, winner, bestHand);
     } while (playAgain());
+
+    cout << "You won " << wins << " out of " << games << " games ("
+        << fixed << showpoint << setprecision(2) << wins*100.0/games << "%)\n";
 
     return 0;
 }
@@ -186,8 +196,10 @@ void getUserInput(int numPlayers, int winner, int bestHand) {
     if (bestHandInput != bestHand)
         cout << "Wrong! The winner's hand was "
             << Hand::handTypes[bestHand-1] << '\n';
-    else
+    else {
         cout << "Correct!\n";
+        wins++;
+    }
 }
 
 bool playAgain() {
