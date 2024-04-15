@@ -1,6 +1,7 @@
 *.out
 *.txt
 *.zip
+*.replit.cpp
 cmake-build-debug
 myapp
 app

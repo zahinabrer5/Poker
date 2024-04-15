@@ -19,8 +19,9 @@ void makeCombiUtil(vector<vector<int>> &ans,
 vector<vector<int>> makeCombi(int n, int k);
 void printVector(const vector<int>& v);
 bool playAgain();
+string checkPlural(const string &s, const double &x);
 
-double score = 0;
+double points = 0;
 
 int main() {
     int games = 0;
@@ -98,8 +99,10 @@ int main() {
         getUserInput(numPlayers, winner, bestHand);
     } while (playAgain());
 
-    cout << "Your score: " << score << "/" << games << " (" << fixed << showpoint
-         << setprecision(2) << score / games * 100 << "%)\n";
+    cout << "Thanks for playing. You got " << points << " "
+        << checkPlural("point", points) << " out of " << games << " "
+        << checkPlural("game", games) << " (" << fixed << showpoint
+        << setprecision(2) << points/games*100 << "%)\n";
 
     return 0;
 }
@@ -172,7 +175,7 @@ void getUserInput(int numPlayers, int winner, int bestHand) {
         int winnerInput;
         do {
             cout << "If there are multiple winners, pick the first one.\n";
-            cout << "Who score this round of poker? Enter a player (1-"
+            cout << "Who wins this round of poker? Enter a player (1-"
                 << numPlayers << "): ";
             winnerInput = getInt();
         } while (!(1 <= winnerInput && winnerInput <= numPlayers));
@@ -181,8 +184,8 @@ void getUserInput(int numPlayers, int winner, int bestHand) {
             cout << "Wrong! The actual winner was Player " << winner << '\n';
             // cout << "Player " << winner << "'s hand was "
             //     << Hand::handTypes[bestHand-1] << '\n';
-        } else score += 0.5;
-    } else score += 0.5;
+        } else points += 0.5;
+    } else points += 0.5;
 
     cout << "What hand did Player " << winner << " have?\n";
     int bestHandInput;
@@ -198,14 +201,14 @@ void getUserInput(int numPlayers, int winner, int bestHand) {
             << Hand::handTypes[bestHand-1] << '\n';
     else {
         cout << "Correct!\n";
-        score += 0.5;
+        points += 0.5;
     }
 }
 
 bool playAgain() {
     int ans;
     do {
-        cout << "Thanks for playing. Play again? 1=Yes, 0=No: ";
+        cout << "Play again? 1=Yes, 0=No: ";
         ans = getInt();
     } while (!(0 <= ans && ans <= 1));
     bool ret = (bool)ans;
@@ -213,4 +216,12 @@ bool playAgain() {
         for (int i = 0; i < 5; i++)
             cout << '\n';
     return ret;
+}
+
+string checkPlural(const string &s, const double &x) {
+    stringstream ss;
+    ss << s;
+    if (x != 1)
+        ss << 's';
+    return ss.str();
 }

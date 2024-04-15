@@ -41,7 +41,7 @@ Player::Player(Card **cards, int numOfCards, string name) {
     this->name = std::move(name);
 }
 
-__attribute__((unused)) Player::Player(const Player &p) : cards(p.cards), numOfCards(p.numOfCards), name(p.name) {
+__attribute__((unused)) Player::Player(const Player &p) : name(p.name), cards(p.cards), numOfCards(p.numOfCards) {
     numOfPlayers++;
 }
 
