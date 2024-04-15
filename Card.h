@@ -41,11 +41,11 @@ public:
 
     [[nodiscard]] string toString() const;
 
-    static int getNumOfCards();
+    __attribute__((unused)) static int getNumOfCards();
 
-    static void deleteCards(Card **cards, int size);
+    __attribute__((unused)) static void deleteCards(Card **cards, int size);
 
-    void operator=(const Card& other);
+    Card& operator=(const Card& other);
 
     friend ostream& operator<<(ostream& os, const Card& card);
 };

@@ -25,25 +25,27 @@ private:
 public:
     Hand();
 
-    Hand(Card **cards);
+    explicit Hand(Card **cards);
 
-    Hand(const Hand &h);
+    __attribute__((unused)) Hand(const Hand &h);
 
     ~Hand();
 
     [[nodiscard]] Card** getCards();
 
-    [[nodiscard]] int getHighestHandRaw();
+    [[nodiscard]] int getHighestHandRaw() const;
 
-    [[nodiscard]] string getHighestHand();
+    __attribute__((unused)) string getHighestHand() const;
 
-    [[nodiscard]] string toString() const;
+    __attribute__((unused)) string toString() const;
 
-    static int getNumOfHands();
+    // __attribute__((unused)) tells the compiler that it's not a problem if a
+    // a variable/function marked as such is unused
+    __attribute__((unused)) static int getNumOfHands();
 
     // static void deleteHand(Hand *hand);
 
-    void operator=(const Hand& other);
+    Hand& operator=(const Hand& other);
 
     friend ostream& operator<<(ostream& os, const Hand& hand);
 

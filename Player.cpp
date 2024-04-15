@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <utility>
 
 #include "Player.h"
 #include "Hand.h"
@@ -19,13 +20,13 @@ Player::Player() {
     name = "1";
 }
 
-Player::Player(int numOfCards, string name) {
+__attribute__((unused)) Player::Player(int numOfCards, string name) {
     if (numOfCards < 1 || numOfCards > 5)
         return;
     this->numOfCards = numOfCards;
     cards = new Card*[numOfCards];
     numOfPlayers++;
-    this->name = name;
+    this->name = std::move(name);
 }
 
 Player::Player(Card **cards, int numOfCards, string name) {
@@ -37,10 +38,10 @@ Player::Player(Card **cards, int numOfCards, string name) {
         this->cards[i] = cards[i];
     // Card::deleteCards(cards, numOfCards);
     numOfPlayers++;
-    this->name = name;
+    this->name = std::move(name);
 }
 
-Player::Player(const Player &p) : cards(p.cards), numOfCards(p.numOfCards), name(p.name) {
+__attribute__((unused)) Player::Player(const Player &p) : cards(p.cards), numOfCards(p.numOfCards), name(p.name) {
     numOfPlayers++;
 }
 
@@ -50,15 +51,15 @@ Player::~Player() {
     numOfPlayers--;
 }
 
-string Player::getName() {
+__attribute__((unused)) string Player::getName() {
     return name;
 }
 
-int Player::getNumOfCards() {
+__attribute__((unused)) int Player::getNumOfCards() const {
     return numOfCards;
 }
 
-Card **Player::getCards() {
+__attribute__((unused)) Card **Player::getCards() {
     return cards;
 }
 
@@ -85,15 +86,11 @@ string Player::toString() const {
     return ss.str();
 }
 
-int Player::getNumOfPlayers() {
+__attribute__((unused)) int Player::getNumOfPlayers() {
     return numOfPlayers;
 }
 
-void Player::operator=(const Player& other) {
-    name = other.name;
-    numOfCards = other.numOfCards;
-    cards = other.cards;
-}
+Player& Player::operator=(const Player& other) = default;
 
 ostream& operator<<(ostream& os, const Player& player) {
     os << "Player " << player.name << ":\n";

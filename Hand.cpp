@@ -48,7 +48,7 @@ Hand::Hand(Card **cards) {
     // cout << "Line 43 of Hand.cpp reached" << endl;
 }
 
-Hand::Hand(const Hand &h) : cards(h.cards), highestHand(h.highestHand) {
+__attribute__((unused)) Hand::Hand(const Hand &h) : cards(h.cards), highestHand(h.highestHand) {
     numOfHands++;
 }
 
@@ -66,15 +66,15 @@ Card **Hand::getCards() {
     return cards;
 }
 
-int Hand::getHighestHandRaw() {
+int Hand::getHighestHandRaw() const {
     return highestHand;
 }
 
-string Hand::getHighestHand() {
+__attribute__((unused)) string Hand::getHighestHand() const {
     return handTypes[highestHand-1];
 }
 
-string Hand::toString() const {
+__attribute__((unused)) string Hand::toString() const {
     stringstream ss;
     ss << "Hand:\n";
     ss << "===============================\n";
@@ -84,7 +84,7 @@ string Hand::toString() const {
     return ss.str();
 }
 
-int Hand::getNumOfHands() {
+__attribute__((unused)) int Hand::getNumOfHands() {
     return numOfHands;
 }
 
@@ -93,10 +93,7 @@ int Hand::getNumOfHands() {
 //     delete hand;
 // }
 
-void Hand::operator=(const Hand& other) {
-    cards = other.cards;
-    highestHand = other.highestHand;
-}
+Hand& Hand::operator=(const Hand& other) = default;
 
 ostream& operator<<(ostream& os, const Hand& hand) {
     os << "Hand:\n";

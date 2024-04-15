@@ -45,14 +45,14 @@ int Card::getSuit() const {
     return suit;
 }
 
-void Card::setFace(int face) {
-    if (0 <= face && face <= 12)
-        this->face = face;
+void Card::setFace(int f) {
+    if (0 <= f && f <= 12)
+        face = f;
 }
 
-void Card::setSuit(int suit) {
-    if (0 <= suit && suit <= 3)
-        this->suit = suit;
+void Card::setSuit(int s) {
+    if (0 <= s && s <= 3)
+        suit = s;
 }
 
 string Card::toString() const {
@@ -61,21 +61,24 @@ string Card::toString() const {
     return ss.str();
 }
 
-int Card::getNumOfCards() {
+__attribute__((unused)) int Card::getNumOfCards() {
     return numOfCards;
 }
 
-void Card::deleteCards(Card **cards, int size) {
+__attribute__((unused)) void Card::deleteCards(Card **cards, int size) {
     for (int i = 0; i < size; i++)
         delete cards[i];
     delete[] cards;
 }
 
 // overload the assignment operator to complete the Rule of Three
-void Card::operator=(const Card& other) {
+Card& Card::operator=(const Card& other) {
     setFace(other.getFace());
     setSuit(other.getSuit());
+    return *this;
 }
+
+// Card& Card::operator=(const Card& other) = default;
 
 ostream& operator<<(ostream& os, const Card& card) {
     os << Card::faces[card.face] << " of " << Card::suits[card.suit];

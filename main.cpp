@@ -17,10 +17,10 @@ void getUserInput(int numPlayers, int winner, int bestHand);
 void makeCombiUtil(vector<vector<int>> &ans,
                    vector<int> &tmp, int n, int left, int k);
 vector<vector<int>> makeCombi(int n, int k);
-void printVector(vector<int> v);
+void printVector(const vector<int>& v);
 bool playAgain();
 
-int wins = 0;
+double score = 0;
 
 int main() {
     int games = 0;
@@ -33,7 +33,7 @@ int main() {
         deck->shuffle();
 
         int max = (52-Hand::SIZE_OF_HAND)/2;
-        int numPlayers = 0;
+        int numPlayers;
         do {
             cout << "Enter number of players (1-" << max << "): ";
             numPlayers = getInt();
@@ -65,8 +65,8 @@ int main() {
             Player *player = new Player(cards, 2, to_string(i+1));
             cout << player->toString() << '\n';
             delete player;
-            for (int i = 2; i < n; i++)
-                cards[i] = communityCards[i-2];
+            for (int j = 2; j < n; j++)
+                cards[j] = communityCards[j-2];
 
             // for (int i = 0; i < n; i++)
                 // cout << "Card " << (i+1) << ": "
@@ -77,8 +77,8 @@ int main() {
                 // cout << "Comb: ";
                 // printVector(comb);
                 Card **handCards = new Card *[k];
-                for (int i = 0; i < k; ++i)
-                    handCards[i] = cards[comb[i]-1];
+                for (int j = 0; j < k; ++j)
+                    handCards[j] = cards[comb[j]-1];
                 Hand *hand = new Hand(handCards);
                 // cout << hand->toString() << "---\n";
                 if (hand->getHighestHandRaw() > bestHand) {
@@ -98,8 +98,8 @@ int main() {
         getUserInput(numPlayers, winner, bestHand);
     } while (playAgain());
 
-    cout << "You won " << wins << " out of " << games << " games ("
-        << fixed << showpoint << setprecision(2) << wins*100.0/games << "%)\n";
+    cout << "Your score: " << score << "/" << games << " (" << fixed << showpoint
+         << setprecision(2) << score / games * 100 << "%)\n";
 
     return 0;
 }
@@ -161,7 +161,7 @@ vector<vector<int>> makeCombi(int n, int k) {
     return ans;
 }
 
-void printVector(vector<int> v) {
+void printVector(const vector<int>& v) {
     for (auto i : v)
         cout << i << ' ';
     cout << '\n';
@@ -169,10 +169,10 @@ void printVector(vector<int> v) {
 
 void getUserInput(int numPlayers, int winner, int bestHand) {
     if (numPlayers > 1) {
-        int winnerInput = 0;
+        int winnerInput;
         do {
             cout << "If there are multiple winners, pick the first one.\n";
-            cout << "Who wins this round of poker? Enter a player (1-"
+            cout << "Who score this round of poker? Enter a player (1-"
                 << numPlayers << "): ";
             winnerInput = getInt();
         } while (!(1 <= winnerInput && winnerInput <= numPlayers));
@@ -181,11 +181,11 @@ void getUserInput(int numPlayers, int winner, int bestHand) {
             cout << "Wrong! The actual winner was Player " << winner << '\n';
             // cout << "Player " << winner << "'s hand was "
             //     << Hand::handTypes[bestHand-1] << '\n';
-        }
-    }
+        } else score += 0.5;
+    } else score += 0.5;
 
     cout << "What hand did Player " << winner << " have?\n";
-    int bestHandInput = 0;
+    int bestHandInput;
     for (int i = 0; i < 10; i++)
         cout << (i+1) << ": " << Hand::handTypes[i] << '\n';
     do {
@@ -198,7 +198,7 @@ void getUserInput(int numPlayers, int winner, int bestHand) {
             << Hand::handTypes[bestHand-1] << '\n';
     else {
         cout << "Correct!\n";
-        wins++;
+        score += 0.5;
     }
 }
 
@@ -208,8 +208,9 @@ bool playAgain() {
         cout << "Thanks for playing. Play again? 1=Yes, 0=No: ";
         ans = getInt();
     } while (!(0 <= ans && ans <= 1));
-    if (ans)
+    bool ret = (bool)ans;
+    if (ret)
         for (int i = 0; i < 5; i++)
             cout << '\n';
-    return ans;
+    return ret;
 }

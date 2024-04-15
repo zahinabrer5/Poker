@@ -23,7 +23,7 @@ public:
 
     Card *dealCard();
 
-    bool moreCards();
+    bool moreCards() const;
 };
 
 

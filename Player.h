@@ -23,27 +23,27 @@ private:
 public:
     Player();
 
-    Player(int numOfCards, string name);
+    __attribute__((unused)) Player(int numOfCards, string name);
 
     Player(Card **cards, int numOfCards, string name);
 
-    Player(const Player &p);
+    __attribute__((unused)) Player(const Player &p);
 
     ~Player();
 
-    [[nodiscard]] string getName();
+    __attribute__((unused)) string getName();
 
-    [[nodiscard]] int getNumOfCards();
+    __attribute__((unused)) int getNumOfCards() const;
 
-    [[nodiscard]] Card **getCards();
+    __attribute__((unused)) Card **getCards();
 
     // void addCard(Card *card);
 
     [[nodiscard]] string toString() const;
 
-    static int getNumOfPlayers();
+    __attribute__((unused)) static int getNumOfPlayers();
 
-    void operator=(const Player& other);
+    Player& operator=(const Player& other);
 
     friend ostream& operator<<(ostream& os, const Player& player);
 };

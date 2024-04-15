@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <random>
 #include <chrono>
-#include <string>
 
 #include "DeckOfCards.h"
 #include "Card.h"
@@ -38,7 +37,7 @@ Card *DeckOfCards::dealCard() {
     return {};
 }
 
-bool DeckOfCards::moreCards() {
+bool DeckOfCards::moreCards() const {
     if (currentCard == SIZE_OF_DECK)
         return false;
     return true;
